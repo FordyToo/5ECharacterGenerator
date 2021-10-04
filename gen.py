@@ -30,20 +30,11 @@ def generate_stat():
     return stat
 
 def stat_mod(x):
-    if x == 8 or x == 9:
-        return -1
-    elif x == 10 or x == 11:
-        return 0
-    elif x == 12 or x == 13:
-        return 1
-    elif x == 14 or x == 15:
-        return 2
-    elif x == 16 or x == 17:
-        return 3
-    elif x == 18 or x == 19:
-        return 4
-    else:
-        return 5
+    assert x >= 0, "Ability cannot be less than 0 or you will die."
+    # Convert from stat score
+    # to modifier
+    # e.g. 20 -> +5 or 6 -> -2
+    return (x - 10) // 2
     
 def generate_character_stats():
     character_stats = []
@@ -62,6 +53,23 @@ class Character():
         self.char_class = generate_class()
         self.stats = generate_character_stats()
 
+        # Hit Die
+        hit_die_sizes = {
+            'bard': 8,
+            'barbarian': 12,
+            'cleric': 8,
+            'druid': 8,
+            'fighter': 10, 
+            'monk': 8,
+            'paladin': 10,
+            'ranger': 10,
+            'rogue': 8,
+            'sorceror': 6,
+            'warlock': 6,
+            'wizard': 6,
+        }
+        self.hit_die = hit_die_sizes[self.char_class]
+        
         if self.char_class == 'barbarian':
             self.strength = self.stats[0]
             self.stats.pop(0)
@@ -77,7 +85,6 @@ class Character():
             self.wisdom = self.stats[w]
             self.stats.pop(w)
             self.charisma = self.stats[0]
-            self.hit_die = 12
         elif self.char_class == 'bard':
             self.charisma = self.stats[0]
             self.stats.pop(0)
@@ -93,7 +100,6 @@ class Character():
             self.intelligence = self.stats[i]
             self.stats.pop(i)
             self.wisdom = self.stats[0]
-            self.hit_die = 8
         elif self.char_class == 'cleric':
             self.wisdom = self.stats[0]
             self.stats.pop(0)
@@ -109,7 +115,6 @@ class Character():
             self.intelligence = self.stats[i]
             self.stats.pop(i)
             self.charisma = self.stats[0]
-            self.hit_die = 8
         elif self.char_class == 'druid':
             self.wisdom = self.stats[0]
             self.stats.pop(0)
@@ -125,7 +130,6 @@ class Character():
             self.intelligence = self.stats[i]
             self.stats.pop(i)
             self.charisma = self.stats[0]
-            self.hit_die = 8
         elif self.char_class == 'fighter':
             n = randint(0,1)
             if n == 0:
@@ -186,7 +190,6 @@ class Character():
                     self.wisdom = self.stats[w]
                     self.stats.pop(w)
                     self.charisma = self.stats[0]
-            self.hit_die = 10
         elif self.char_class == 'monk':
             self.dexterity = self.stats[0]
             self.stats.pop(0)
@@ -202,7 +205,6 @@ class Character():
             self.intelligence = self.stats[i]
             self.stats.pop(i)
             self.charisma = self.stats[0]
-            self.hit_die = 8
         elif self.char_class == 'paladin':
             self.strength = self.stats[0]
             self.stats.pop(0)
@@ -218,7 +220,6 @@ class Character():
             self.intelligence = self.stats[i]
             self.stats.pop(i)
             self.wisdom = self.stats[0]
-            self.hit_die = 10
         elif self.char_class == 'ranger':
             self.dexterity = self.stats[0]
             self.stats.pop(0)
@@ -234,7 +235,6 @@ class Character():
             self.intelligence = self.stats[i]
             self.stats.pop(i)
             self.charisma = self.stats[0]
-            self.hit_die = 10
         elif self.char_class == 'rogue':
             self.dexterity = self.stats[0]
             self.stats.pop(0)
@@ -265,7 +265,6 @@ class Character():
                 self.wisdom = self.stats[w]
                 self.stats.pop(w)
                 self.intelligence = self.stats[0]
-            self.hit_die = 8
         elif self.char_class == 'sorcerer':
             self.charisma = self.stats[0]
             self.stats.pop(0)
@@ -281,7 +280,6 @@ class Character():
             self.intelligence = self.stats[i]
             self.stats.pop(i)
             self.wisdom = self.stats[0]
-            self.hit_die = 6
         elif self.char_class == 'warlock':
             self.charisma = self.stats[0]
             self.stats.pop(0)
@@ -297,7 +295,6 @@ class Character():
             self.intelligence = self.stats[i]
             self.stats.pop(i)
             self.wisdom = self.stats[0]
-            self.hit_die = 6
         elif self.char_class == 'wizard':
             self.intelligence = self.stats[0]
             self.stats.pop(0)
@@ -352,7 +349,6 @@ class Character():
                     self.wisdom = self.stats[w]
                     self.stats.pop(w)
                     self.charisma = self.stats[0]
-            self.hit_die = 6
 
         if self.race == 'dragonborn':
             self.strength += 2
